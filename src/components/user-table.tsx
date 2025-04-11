@@ -14,6 +14,7 @@ import {EditUserDialog} from "@/components/edit-user-dialog";
 import {DeleteUserDialog} from "@/components/delete-user-dialog";
 import {Button} from "@/components/ui/button";
 import {useUser} from '@/context/user-context';
+import { toast } from 'react-toastify';
 
 // Define the structure for user data
 interface User {
@@ -22,6 +23,7 @@ interface User {
   email: string;
   role: "Admin" | "User";
   status: "Active" | "Inactive";
+  username:string
 }
 
 export function UserTable() {
@@ -91,3 +93,4 @@ export function UserTable() {
     </div>
   );
 }
+

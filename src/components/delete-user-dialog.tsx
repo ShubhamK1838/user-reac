@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -13,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from 'react-toastify';
+import {useUser} from '@/context/user-context';
 
 interface DeleteUserDialogProps {
   userId: string;
@@ -21,17 +21,40 @@ interface DeleteUserDialogProps {
 }
 
 export function DeleteUserDialog({userId, userName, onDeleteUser}: DeleteUserDialogProps) {
-  const handleDelete = () => {
-    onDeleteUser(userId);
-    toast.success(`User ${userName} deleted successfully!`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+  const {user} = useUser();
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`http://localhost:9093/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user?.jwtToken}`,
+        },
+      });
+
+      if (response.ok) {
+        onDeleteUser(userId);
+        toast.success(`User ${userName} deleted successfully!`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        toast.error(`Failed to delete user ${userName}.`, {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error(`Error deleting user ${userName}.`, {
+        position: "top-right",
+        autoClose: 5000,
+      });
+    }
   };
 
   return (
