@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, {useState} from 'react';
@@ -16,8 +15,67 @@ const LoginPage = () => {
   const {login} = useUser(); // Use the login function from the context
 
   const handleLogin = async () => {
-    if (username === 'root' && password === 'root') {
-      toast.success('Login Successful - Logged in as root.', {
+    try {
+      if (username === 'root' && password === 'root') {
+        // Mock JWT token for root user
+        const mockToken = 'mocked_jwt_token_for_root';
+        login(username, 'root@example.com', mockToken);
+
+        toast.success('Login Successful - Logged in as root.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        router.push('/');
+        return;
+      }
+
+      // Make a request to the backend for login and JWT token
+      const response = await fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username, password}),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const jwtToken = data.jwt; // Assuming the backend returns { jwt: 'token' }
+
+        // Store the JWT token and user info in context
+        login(username, '', jwtToken);
+
+        toast.success('Login Successful!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        router.push('/');
+      } else {
+        toast.error('Login Failed - Invalid credentials.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('Login Failed - An error occurred.', {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -26,23 +84,7 @@ const LoginPage = () => {
         draggable: true,
         progress: undefined,
       });
-      // Call the login function from the context
-      login(username, 'root@example.com');
-      router.push('/');
-      return;
     }
-
-    toast.error('Login Failed - Invalid credentials.', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-
-    return;
   };
 
   return (

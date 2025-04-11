@@ -6,6 +6,7 @@ import React, {createContext, useState, useEffect, useContext} from 'react';
 interface User {
   username: string;
   email: string;
+  jwtToken: string | null; // JWT token
   // Add other user properties as needed
 }
 
@@ -15,7 +16,7 @@ interface UserContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  login: (username: string, email: string) => void;
+  login: (username: string, email: string, jwtToken: string) => void;
   logout: () => void;
 }
 
@@ -31,27 +32,29 @@ const UserContext = createContext<UserContextType>({
 
 // Create a provider component
 const UserProvider = ({children}: {children: React.ReactNode}) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>({username: '', email: '', jwtToken: null});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     // Check if user data exists in localStorage on component mount
     const storedUsername = localStorage.getItem('username');
     const storedEmail = localStorage.getItem('email');
+    const storedJwtToken = localStorage.getItem('jwtToken');
 
-    if (storedUsername && storedEmail) {
-      setUser({username: storedUsername, email: storedEmail});
+    if (storedUsername && storedEmail && storedJwtToken) {
+      setUser({username: storedUsername, email: storedEmail, jwtToken: storedJwtToken});
       setIsLoggedIn(true);
     }
   }, []);
 
-  const login = (username: string, email: string) => {
+  const login = (username: string, email: string, jwtToken: string) => {
     // Store user data in localStorage
     localStorage.setItem('username', username);
     localStorage.setItem('email', email);
+    localStorage.setItem('jwtToken', jwtToken); // Store JWT token
 
     // Update context state
-    setUser({username, email});
+    setUser({username, email, jwtToken});
     setIsLoggedIn(true);
   };
 
@@ -59,9 +62,10 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
     // Remove user data from localStorage
     localStorage.removeItem('username');
     localStorage.removeItem('email');
+    localStorage.removeItem('jwtToken'); // Remove JWT token
 
     // Update context state
-    setUser(null);
+    setUser({username: '', email: '', jwtToken: null});
     setIsLoggedIn(false);
   };
 

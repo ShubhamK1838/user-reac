@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   Table,
   TableBody,
@@ -13,6 +13,7 @@ import {
 import {EditUserDialog} from "@/components/edit-user-dialog";
 import {DeleteUserDialog} from "@/components/delete-user-dialog";
 import {Button} from "@/components/ui/button";
+import {useUser} from '@/context/user-context';
 
 // Define the structure for user data
 interface User {
@@ -23,33 +24,31 @@ interface User {
   status: "Active" | "Inactive";
 }
 
-// Initial hardcoded user data
-const initialUsers: User[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Admin",
-    status: "Active",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    role: "User",
-    status: "Inactive",
-  },
-  {
-    id: "3",
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    role: "User",
-    status: "Active",
-  },
-];
-
 export function UserTable() {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<User[]>([]);
+  const {user} = useUser();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/users/get-all', {
+          headers: {
+            'Authorization': `Bearer ${user?.jwtToken}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUsers(data);
+        } else {
+          console.error('Failed to fetch users');
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, [user?.jwtToken]);
 
   const handleUpdateUser = (updatedUser: User) => {
     setUsers(users.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
