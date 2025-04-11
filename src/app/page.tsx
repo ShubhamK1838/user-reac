@@ -24,7 +24,7 @@ export default function Home() {
         <h2 className="text-2xl font-semibold">User List</h2>
         <AddUserDialog />
       </div>
-      <UserTable />
+      {isLoggedIn ? <UserTable /> : null}
     </div>
   );
 }
