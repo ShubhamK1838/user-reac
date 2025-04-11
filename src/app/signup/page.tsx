@@ -1,12 +1,11 @@
-
 'use client';
 
 import React, {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import { toast } from 'react-toastify';
+import {AuthCard} from '@/components/auth-card';
 
 const SignupPage = () => {
   const [username, setUsername] = useState('');
@@ -31,42 +30,40 @@ const SignupPage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-background">
-      <Card className="w-96">
-        <CardHeader>
-          <CardTitle>Signup</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-foreground">Username</label>
-            <Input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground">Email</label>
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground">Password</label>
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-          </div>
-          <Button onClick={handleSignup}>Signup</Button>
-        </CardContent>
-      </Card>
+      <AuthCard
+        title="Signup"
+        description="Create a new account"
+        onSubmit={handleSignup}
+        submitButtonText="Signup"
+      >
+        <div>
+          <label className="block text-sm font-medium text-foreground">Username</label>
+          <Input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-foreground">Email</label>
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-foreground">Password</label>
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+      </AuthCard>
     </div>
   );
 };

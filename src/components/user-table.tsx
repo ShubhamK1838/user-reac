@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -10,25 +10,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {EditUserDialog} from "@/components/edit-user-dialog";
-import {DeleteUserDialog} from "@/components/delete-user-dialog";
-import {Button} from "@/components/ui/button";
-import {useUser} from '@/context/user-context';
+import { EditUserDialog } from "@/components/edit-user-dialog";
+import { DeleteUserDialog } from "@/components/delete-user-dialog";
+import { useUser } from '@/context/user-context';
 import { toast } from 'react-toastify';
 
-// Define the structure for user data
 interface User {
   id: string;
-  name: string;
-  email: string;
-  role: "Admin" | "User";
-  status: "Active" | "Inactive";
-  username:string
+  username: string;
+  roles: string | null;
+  authorities: { authority: string }[];
+  enabled: boolean;
+  credentialsNonExpired: boolean;
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
 }
 
 export function UserTable() {
   const [users, setUsers] = useState<User[]>([]);
-  const {user} = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -40,12 +40,14 @@ export function UserTable() {
         });
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           setUsers(data);
         } else {
-          console.error('Failed to fetch users');
+          toast.error('Failed to fetch users.');
         }
       } catch (error) {
         console.error('Error fetching users:', error);
+        toast.error('An error occurred while fetching users.');
       }
     };
 
@@ -66,24 +68,28 @@ export function UserTable() {
         <TableCaption>A list of Firebase Studio users.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
+            <TableHead>Username</TableHead>
+            <TableHead>Roles</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Authorities</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role}</TableCell>
-              <TableCell>{user.status}</TableCell>
+              <TableCell>{user.username}</TableCell>
+              <TableCell>{user.roles ?? 'N/A'}</TableCell>
+              <TableCell>{user.enabled ? 'Active' : 'Inactive'}</TableCell>
+              <TableCell>
+                {user.authorities.map((auth, i) => (
+                  <span key={i} className="inline-block mr-2">{auth.authority}</span>
+                ))}
+              </TableCell>
               <TableCell className="text-right font-medium">
                 <div className="flex justify-end gap-2">
                   <EditUserDialog user={user} onUpdateUser={handleUpdateUser} />
-                  <DeleteUserDialog userId={user.id} userName={user.name} onDeleteUser={handleDeleteUser} />
+                  <DeleteUserDialog userId={user.id} userName={user.username} onDeleteUser={handleDeleteUser} />
                 </div>
               </TableCell>
             </TableRow>
@@ -93,4 +99,3 @@ export function UserTable() {
     </div>
   );
 }
-

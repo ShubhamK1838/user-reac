@@ -4,9 +4,9 @@ import React, {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {useUser} from '@/context/user-context';
 import { toast } from 'react-toastify';
+import {AuthCard} from '@/components/auth-card';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -77,48 +77,45 @@ const LoginPage = () => {
       console.error('Login error:', error);
       toast.error('Login Failed - An error occurred.', {
         position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
       });
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-background">
-      <Card className="w-96">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Enter your username and password to login.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-foreground">Username</label>
-            <Input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground">Password</label>
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-          </div>
-          <Button onClick={handleLogin}>Login</Button>
-        </CardContent>
-      </Card>
+      <AuthCard
+        title="Login"
+        description="Enter your username and password to login."
+        onSubmit={handleLogin}
+        submitButtonText="Login"
+      >
+        <div>
+          <label className="block text-sm font-medium text-foreground">Username</label>
+          <Input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-foreground">Password</label>
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+      </AuthCard>
     </div>
   );
 };
 
 export default LoginPage;
-
