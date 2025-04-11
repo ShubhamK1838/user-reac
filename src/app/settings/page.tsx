@@ -14,7 +14,12 @@ const SettingsPage = () => {
         <CardContent className="space-y-4">
           <div>
             {/* Add your settings components here */}
-            <p>Settings content goes here...</p>
+            <p>Here you can manage your app settings:</p>
+            <ul>
+              <li>- Change Password</li>
+              <li>- Update Email Preferences</li>
+              <li>- Manage Notifications</li>
+            </ul>
           </div>
         </CardContent>
       </Card>
@@ -23,3 +28,4 @@ const SettingsPage = () => {
 };
 
 export default SettingsPage;
+
