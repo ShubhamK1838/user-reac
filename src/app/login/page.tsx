@@ -20,6 +20,7 @@ const LoginPage = () => {
         description: 'Logged in as root.',
       });
       localStorage.setItem('username', username);
+      localStorage.setItem('email', 'root@example.com'); // Setting a default email for root
       router.push('/');
       return;
     }
@@ -67,5 +68,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-    

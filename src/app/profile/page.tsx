@@ -17,7 +17,9 @@ const ProfilePage = () => {
   useEffect(() => {
     // Retrieve user data from localStorage or any other source
     const storedUsername = localStorage.getItem('username') || '';
+    const storedEmail = localStorage.getItem('email') || ''; // Retrieve email as well
     setUsername(storedUsername);
+    setEmail(storedEmail); // Set the email state
   }, []);
 
   const handleUpdateProfile = async () => {
@@ -28,8 +30,9 @@ const ProfilePage = () => {
       description: 'Your profile has been updated successfully.',
     });
 
-    // You can also update the username in localStorage if needed
+    // You can also update the username and email in localStorage if needed
     localStorage.setItem('username', username);
+    localStorage.setItem('email', email);
   };
 
   return (
