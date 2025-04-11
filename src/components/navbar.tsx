@@ -31,7 +31,7 @@ const Navbar = () => {
         <Tabs defaultValue="users" className="w-[400px]">
           <TabsList>
             <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+            {isLoggedIn && <TabsTrigger value="settings"><Link href="/settings">Settings</Link></TabsTrigger>}
             {isLoggedIn && <TabsTrigger value="profile"><Link href="/profile">Profile</Link></TabsTrigger>}
           </TabsList>
         </Tabs>
