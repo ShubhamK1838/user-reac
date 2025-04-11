@@ -5,7 +5,6 @@ import {useRouter} from 'next/navigation';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {signIn} from 'next-auth/react';
 import {useToast} from '@/hooks/use-toast';
 
 const LoginPage = () => {
@@ -20,29 +19,18 @@ const LoginPage = () => {
         title: 'Login Successful',
         description: 'Logged in as root.',
       });
+      localStorage.setItem('username', username);
       router.push('/');
       return;
     }
 
-    const result = await signIn('credentials', {
-      username,
-      password,
-      redirect: false,
+    toast({
+      variant: 'destructive',
+      title: 'Login Failed',
+      description: 'Invalid credentials.',
     });
 
-    if (result?.error) {
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Invalid credentials.',
-      });
-    } else {
-      toast({
-        title: 'Login Successful',
-        description: 'You have been successfully logged in.',
-      });
-      router.push('/');
-    }
+    return;
   };
 
   return (
@@ -79,3 +67,5 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+    
