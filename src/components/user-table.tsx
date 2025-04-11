@@ -13,15 +13,6 @@ import {
 import {EditUserDialog} from "@/components/edit-user-dialog";
 import {DeleteUserDialog} from "@/components/delete-user-dialog";
 import {Button} from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {generateUserProfileSummary} from "@/ai/flows/generate-user-profile-summary";
 
 // Define the structure for user data
 interface User {
@@ -59,9 +50,6 @@ const initialUsers: User[] = [
 
 export function UserTable() {
   const [users, setUsers] = useState<User[]>(initialUsers);
-  const [open, setOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [profileSummary, setProfileSummary] = useState<string | null>(null);
 
   const handleUpdateUser = (updatedUser: User) => {
     setUsers(users.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
@@ -69,23 +57,6 @@ export function UserTable() {
 
   const handleDeleteUser = (id: string) => {
     setUsers(users.filter((user) => user.id !== id));
-  };
-
-  const handleAISummary = async (user: User) => {
-    setSelectedUser(user);
-    setOpen(true);
-    try {
-      const summary = await generateUserProfileSummary({
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-      });
-      setProfileSummary(summary.profileSummary);
-    } catch (error) {
-      console.error("Failed to generate summary:", error);
-      setProfileSummary("Failed to generate profile summary.");
-    }
   };
 
   return (
@@ -112,26 +83,6 @@ export function UserTable() {
                 <div className="flex justify-end gap-2">
                   <EditUserDialog user={user} onUpdateUser={handleUpdateUser} />
                   <DeleteUserDialog userId={user.id} userName={user.name} onDeleteUser={handleDeleteUser} />
-                  <Dialog open={open && selectedUser?.id === user.id} onOpenChange={setOpen}>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        AI Summary
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>AI Profile Summary</DialogTitle>
-                        <DialogDescription>
-                          {selectedUser?.name} - {selectedUser?.email}
-                        </DialogDescription>
-                      </DialogHeader>
-                      {profileSummary ? (
-                        <div className="mt-4">{profileSummary}</div>
-                      ) : (
-                        <div className="mt-4">Loading summary...</div>
-                      )}
-                    </DialogContent>
-                  </Dialog>
                 </div>
               </TableCell>
             </TableRow>
