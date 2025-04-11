@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, {useState} from 'react';
@@ -5,21 +6,25 @@ import {useRouter} from 'next/navigation';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {useToast} from '@/hooks/use-toast';
+import { toast } from 'react-toastify';
 
 const SignupPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const router = useRouter();
-  const {toast} = useToast();
 
   const handleSignup = async () => {
     // Implement signup logic here (e.g., API call)
     console.log('Signup:', {username, password, email});
-    toast({
-      title: 'Signup Feature',
-      description: 'Signup functionality will be implemented in future steps. For now, please use the login page.',
+    toast.info('Signup functionality will be implemented in future steps. For now, please use the login page.', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
     router.push('/login'); // Redirect to login for now.
   };

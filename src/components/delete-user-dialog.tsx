@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -11,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from 'react-toastify';
 
 interface DeleteUserDialogProps {
   userId: string;
@@ -21,6 +23,15 @@ interface DeleteUserDialogProps {
 export function DeleteUserDialog({userId, userName, onDeleteUser}: DeleteUserDialogProps) {
   const handleDelete = () => {
     onDeleteUser(userId);
+    toast.success(`User ${userName} deleted successfully!`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   return (

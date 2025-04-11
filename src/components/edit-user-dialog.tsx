@@ -1,10 +1,10 @@
+
 "use client";
 
 import * as React from "react";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useToast} from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from 'react-toastify';
 
 interface User {
   id: string;
@@ -49,7 +50,6 @@ interface EditUserDialogProps {
 }
 
 export function EditUserDialog({user, onUpdateUser}: EditUserDialogProps) {
-  const {toast} = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,9 +67,14 @@ export function EditUserDialog({user, onUpdateUser}: EditUserDialogProps) {
       ...values,
     };
     onUpdateUser(updatedUser);
-    toast({
-      title: "User updated successfully!",
-      description: `User ${values.name} has been updated.`,
+    toast.success(`User ${values.name} updated successfully!`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
   }
 

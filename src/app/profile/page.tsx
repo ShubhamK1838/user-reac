@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, {useState, useEffect} from 'react';
@@ -5,15 +6,14 @@ import {useRouter} from 'next/navigation';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {useToast} from '@/hooks/use-toast';
 import {useUser} from '@/context/user-context'; // Import the useUser hook
+import { toast } from 'react-toastify';
 
 const ProfilePage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-  const {toast} = useToast();
   const {user} = useUser(); // Access user data from the context
 
   useEffect(() => {
@@ -27,9 +27,14 @@ const ProfilePage = () => {
   const handleUpdateProfile = async () => {
     // Implement update profile logic here (e.g., API call)
     console.log('Update Profile:', {username, email, password});
-    toast({
-      title: 'Profile Updated',
-      description: 'Your profile has been updated successfully.',
+    toast.success('Profile Updated - Your profile has been updated successfully.', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
 
     // You can also update the username and email in localStorage if needed

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, {useState} from 'react';
@@ -5,21 +6,25 @@ import {useRouter} from 'next/navigation';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
-import {useToast} from '@/hooks/use-toast';
 import {useUser} from '@/context/user-context';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-  const {toast} = useToast();
   const {login} = useUser(); // Use the login function from the context
 
   const handleLogin = async () => {
     if (username === 'root' && password === 'root') {
-      toast({
-        title: 'Login Successful',
-        description: 'Logged in as root.',
+      toast.success('Login Successful - Logged in as root.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
       // Call the login function from the context
       login(username, 'root@example.com');
@@ -27,10 +32,14 @@ const LoginPage = () => {
       return;
     }
 
-    toast({
-      variant: 'destructive',
-      title: 'Login Failed',
-      description: 'Invalid credentials.',
+    toast.error('Login Failed - Invalid credentials.', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
 
     return;

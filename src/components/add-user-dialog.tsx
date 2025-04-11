@@ -1,10 +1,10 @@
+
 "use client";
 
 import * as React from "react";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useToast} from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from 'react-toastify';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -36,7 +37,6 @@ const formSchema = z.object({
 });
 
 export function AddUserDialog() {
-  const {toast} = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,13 +49,14 @@ export function AddUserDialog() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
+    toast.success('User Added Successfully', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
     });
   }
 
