@@ -22,7 +22,7 @@ export default function Home() {
       <h1 className="text-3xl font-bold mb-5">User Management</h1>
       <div className="flex justify-between items-center mb-5">
         <h2 className="text-2xl font-semibold">User List</h2>
-        <AddUserDialog />
+        {isLoggedIn && <AddUserDialog />}
       </div>
       {isLoggedIn ? <UserTable /> : null}
     </div>
