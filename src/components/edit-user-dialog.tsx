@@ -16,13 +16,20 @@ import {
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
-  status: string;
+  role: "Admin" | "User";
+  status: "Active" | "Inactive";
 }
 
 const formSchema = z.object({
@@ -32,12 +39,8 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  role: z.string().min(3, {
-    message: "Role must be at least 3 characters.",
-  }),
-  status: z.string().min(4, {
-    message: "Status must be at least 4 characters.",
-  }),
+  role: z.enum(["Admin", "User"]),
+  status: z.enum(["Active", "Inactive"]),
 });
 
 interface EditUserDialogProps {
@@ -120,9 +123,17 @@ export function EditUserDialog({user, onUpdateUser}: EditUserDialogProps) {
               render={({field}) => (
                 <FormItem>
                   <FormLabel>Role</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Admin" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a role" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Admin">Admin</SelectItem>
+                      <SelectItem value="User">User</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormDescription>This is the user's role in the system.</FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -134,9 +145,17 @@ export function EditUserDialog({user, onUpdateUser}: EditUserDialogProps) {
               render={({field}) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Active" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormDescription>This is the user's current status.</FormDescription>
                   <FormMessage />
                 </FormItem>

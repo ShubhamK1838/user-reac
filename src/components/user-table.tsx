@@ -19,8 +19,8 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
-  status: string;
+  role: "Admin" | "User";
+  status: "Active" | "Inactive";
 }
 
 // Initial hardcoded user data
@@ -36,14 +36,14 @@ const initialUsers: User[] = [
     id: "2",
     name: "Jane Smith",
     email: "jane.smith@example.com",
-    role: "Editor",
+    role: "User",
     status: "Inactive",
   },
   {
     id: "3",
     name: "Alice Johnson",
     email: "alice.johnson@example.com",
-    role: "Viewer",
+    role: "User",
     status: "Active",
   },
 ];
