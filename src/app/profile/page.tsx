@@ -29,7 +29,7 @@ const ProfilePage = () => {
       console.log('Update Profile:', {username, email, password});
       // You should make an API call to update the profile in the backend
 
-      const response = await fetch(`http://localhost:8080/users/${user?.username}`, {
+      const response = await fetch(`http://localhost:9093/users/${user?.username}`, {
         method: 'PUT', // Or PATCH depending on your API
         headers: {
           'Content-Type': 'application/json',

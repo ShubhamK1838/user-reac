@@ -31,7 +31,7 @@ export function UserTable() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:8080/users/get-all', {
+        const response = await fetch('http://localhost:9093/users/get-all', {
           headers: {
             'Authorization': `Bearer ${user?.jwtToken}`,
           },

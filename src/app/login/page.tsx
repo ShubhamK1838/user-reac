@@ -36,7 +36,7 @@ const LoginPage = () => {
       }
 
       // Make a request to the backend for login and JWT token
-      const response = await fetch('http://localhost:8080/auth/login', {
+      const response = await fetch('http://localhost:9093/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
