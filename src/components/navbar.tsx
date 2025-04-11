@@ -3,8 +3,25 @@
 import Link from 'next/link';
 import {Button} from '@/components/ui/button';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {useRouter} from 'next/navigation';
+import {useEffect, useState} from 'react';
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if the user is logged in
+    const storedUsername = localStorage.getItem('username');
+    setIsLoggedIn(!!storedUsername);
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    setIsLoggedIn(false);
+    router.push('/login');
+  };
+
   return (
     <nav className="bg-secondary p-4 flex justify-between items-center">
       <Link href="/" className="text-xl font-bold">
@@ -15,21 +32,29 @@ const Navbar = () => {
           <TabsList>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
+            {isLoggedIn && <TabsTrigger value="profile"><Link href="/profile">Profile</Link></TabsTrigger>}
           </TabsList>
         </Tabs>
       </div>
       <div className="space-x-4">
-        <Link href="/signup">
-          <Button variant="outline" size="sm">
-            Signup
+        {!isLoggedIn ? (
+          <>
+            <Link href="/signup">
+              <Button variant="outline" size="sm">
+                Signup
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button variant="default" size="sm">
+                Login
+              </Button>
+            </Link>
+          </>
+        ) : (
+          <Button variant="default" size="sm" onClick={handleLogout}>
+            Logout
           </Button>
-        </Link>
-        <Link href="/login">
-          <Button variant="default" size="sm">
-            Login
-          </Button>
-        </Link>
+        )}
       </div>
     </nav>
   );
