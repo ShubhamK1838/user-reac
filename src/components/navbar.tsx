@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import {Button} from '@/components/ui/button';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 
 const Navbar = () => {
   return (
@@ -9,6 +10,15 @@ const Navbar = () => {
       <Link href="/" className="text-xl font-bold">
         UserBase
       </Link>
+      <div>
+        <Tabs defaultValue="users" className="w-[400px]">
+          <TabsList>
+            <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
       <div className="space-x-4">
         <Link href="/signup">
           <Button variant="outline" size="sm">
