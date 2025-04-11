@@ -6,6 +6,7 @@ import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {useToast} from '@/hooks/use-toast';
+import {useUser} from '@/context/user-context'; // Import the useUser hook
 
 const ProfilePage = () => {
   const [username, setUsername] = useState('');
@@ -13,14 +14,15 @@ const ProfilePage = () => {
   const [password, setPassword] = useState('');
   const router = useRouter();
   const {toast} = useToast();
+  const {user} = useUser(); // Access user data from the context
 
   useEffect(() => {
-    // Retrieve user data from localStorage or any other source
-    const storedUsername = localStorage.getItem('username') || '';
-    const storedEmail = localStorage.getItem('email') || ''; // Retrieve email as well
-    setUsername(storedUsername);
-    setEmail(storedEmail); // Set the email state
-  }, []);
+    // Set the username and email from the context if available
+    if (user) {
+      setUsername(user.username || '');
+      setEmail(user.email || '');
+    }
+  }, [user]);
 
   const handleUpdateProfile = async () => {
     // Implement update profile logic here (e.g., API call)

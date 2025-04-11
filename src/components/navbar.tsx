@@ -4,23 +4,12 @@ import Link from 'next/link';
 import {Button} from '@/components/ui/button';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useRouter} from 'next/navigation';
-import {useEffect, useState} from 'react';
+import {useUser} from '@/context/user-context'; // Import the useUser hook
+import {useEffect} from 'react';
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    // Check if the user is logged in
-    const storedUsername = localStorage.getItem('username');
-    setIsLoggedIn(!!storedUsername);
-  }, [router]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('username');
-    setIsLoggedIn(false);
-    router.push('/login');
-  };
+  const {isLoggedIn, logout} = useUser(); // Use the isLoggedIn state and logout function from the context
 
   return (
     <nav className="bg-secondary p-4 flex justify-between items-center">
@@ -30,9 +19,19 @@ const Navbar = () => {
       <div>
         <Tabs defaultValue="users" className="w-[400px]">
           <TabsList>
-            <TabsTrigger value="users">Users</TabsTrigger>
-            {isLoggedIn && <TabsTrigger value="settings"><Link href="/settings">Settings</Link></TabsTrigger>}
-            {isLoggedIn && <TabsTrigger value="profile"><Link href="/profile">Profile</Link></TabsTrigger>}
+            <TabsTrigger value="users">
+              <Link href="/">Users</Link>
+            </TabsTrigger>
+            {isLoggedIn && (
+              <>
+                <TabsTrigger value="settings">
+                  <Link href="/settings">Settings</Link>
+                </TabsTrigger>
+                <TabsTrigger value="profile">
+                  <Link href="/profile">Profile</Link>
+                </TabsTrigger>
+              </>
+            )}
           </TabsList>
         </Tabs>
       </div>
@@ -51,7 +50,7 @@ const Navbar = () => {
             </Link>
           </>
         ) : (
-          <Button variant="default" size="sm" onClick={handleLogout}>
+          <Button variant="default" size="sm" onClick={() => logout()}>
             Logout
           </Button>
         )}

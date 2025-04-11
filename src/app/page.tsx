@@ -4,16 +4,18 @@ import {UserTable} from '@/components/user-table';
 import {AddUserDialog} from '@/components/add-user-dialog';
 import {useRouter} from 'next/navigation';
 import {useEffect} from 'react';
+import {useUser} from '@/context/user-context'; // Import the useUser hook
 
 export default function Home() {
   const router = useRouter();
+  const {isLoggedIn} = useUser(); // Use the isLoggedIn state from the context
 
   useEffect(() => {
-    // Check if the user is 'root'
-    if (localStorage.getItem('username') !== 'root') {
-      router.push('/login'); // Redirect to login page
+    // Check if the user is logged in
+    if (!isLoggedIn) {
+      router.push('/login'); // Redirect to login page if not logged in
     }
-  }, [router]);
+  }, [router, isLoggedIn]);
 
   return (
     <div className="container mx-auto py-10">
@@ -26,4 +28,3 @@ export default function Home() {
     </div>
   );
 }
-

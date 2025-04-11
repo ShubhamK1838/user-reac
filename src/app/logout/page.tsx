@@ -1,20 +1,21 @@
 'use client';
 
-import {signOut} from 'next-auth/react';
-import {useEffect} from 'react';
 import {useRouter} from 'next/navigation';
+import {useEffect} from 'react';
+import {useUser} from '@/context/user-context'; // Import the useUser hook
 
 const LogoutPage = () => {
   const router = useRouter();
+  const {logout} = useUser(); // Get the logout function from the context
 
   useEffect(() => {
-    const logout = async () => {
-      await signOut({redirect: false});
+    const logoutAction = async () => {
+      logout(); // Call the logout function from the context
       router.push('/login');
     };
 
-    logout();
-  }, [router]);
+    logoutAction();
+  }, [router, logout]);
 
   return <div>Logging out...</div>;
 };

@@ -19,7 +19,7 @@ const SignupPage = () => {
     console.log('Signup:', {username, password, email});
     toast({
       title: 'Signup Feature',
-      description: 'Signup functionality will be implemented in future steps.  For now, please use the login page.',
+      description: 'Signup functionality will be implemented in future steps. For now, please use the login page.',
     });
     router.push('/login'); // Redirect to login for now.
   };

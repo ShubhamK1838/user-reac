@@ -6,12 +6,14 @@ import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {useToast} from '@/hooks/use-toast';
+import {useUser} from '@/context/user-context';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const {toast} = useToast();
+  const {login} = useUser(); // Use the login function from the context
 
   const handleLogin = async () => {
     if (username === 'root' && password === 'root') {
@@ -19,8 +21,8 @@ const LoginPage = () => {
         title: 'Login Successful',
         description: 'Logged in as root.',
       });
-      localStorage.setItem('username', username);
-      localStorage.setItem('email', 'root@example.com'); // Setting a default email for root
+      // Call the login function from the context
+      login(username, 'root@example.com');
       router.push('/');
       return;
     }
